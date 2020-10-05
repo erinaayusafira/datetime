@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DateTime</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#check').click(function(){
+                $('#req').val(function(){
+                    return this.value + `{{.Time}}`;
+                })
+            });
+        });
+        $(function(){
+            $("#user-form").on("submit", function (e) {
+                e.preventDefault();
+                var $self = $(this);
+                var playload = JSON.stringify({
+                    times : $('[name = "time"]').val(),
+                });
+                $.ajax({
+                url: $self.attr("action"),
+                type: $self.attr("method"),
+                data: playload,
+                contentType: 'application/json',
+                }).then(function (res) {
+                    $(".message").text(res);
+                    }).catch(function (a) {
+                        alert("ERROR: " + a.responseText);
+                        });
+                        });
+                        $(document).ready(function(){
+                            $('#reset').click(function(){
+                                location.reload();
+                            });
+                        })
+            });
+            
+    </script>   
+</head>
+<body>
+    <button id="check">Click</button>
+    <br>
+    <form action="/proses" method="POST" id="user-form">
+    <input type="text" id="req" name="times" required>
+    <br>
+    <button id="posted">Result</button>
+    </form>
+    <br>
+    <p id="response1"></p>
+    <p id="response2"></p>
+    <p class="message"></p>
+    <button id="reset">Reset</button>
+</body>
+</html>
